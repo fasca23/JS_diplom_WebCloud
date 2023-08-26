@@ -8,6 +8,7 @@
 class VK {
 
   static ACCESS_TOKEN = '';
+  // static ACCESS_TOKEN = '';
   static lastCallback;
   static BaseUrl = 'https://api.vk.com/method/'
   
@@ -33,12 +34,20 @@ class VK {
   // `VK.processData` для обработки ответа.
   static processData(result){
     // 1. Чтобы документ не засорялся добавленными тегами `script` необходимо найти и удалить тег `script`, который добавлялся для выполнения запроса.
-    document.getElementById('addedScript').remove();
-    result.onerror = () => {
-    // 2. В случае возникновения ошибки выводите её в `alert` и завершайте выполнение обработчика ответа от сервера.
-      alert('Не удалось загрузить скрипт!');
+    let addedScript = document.getElementById('addedScript')
+    // document.getElementById('addedScript').remove();
+    addedScript.remove();
+
+    // result.onerror = () => {
+    // // 2. В случае возникновения ошибки выводите её в `alert` и завершайте выполнение обработчика ответа от сервера.
+    //   alert('Не удалось загрузить скрипт!');
+    //   return;
+    // };
+    if (result.error) {
+      alert(result.error.error_msg);
       return;
-    };
+    }
+
     
     // 3. Найдите самые крупные изображения из ответа от сервера и передайте изображения в колбек, который передавался в метод `VK.get`, который сохранялся в `lastCallback`.
     const types = ['w', 'z', 'y', 'x', 'r', 'q', 'p', 'm', 'o', 's'];
